@@ -12,11 +12,13 @@ namespace FractalPainting.App
         [STAThread]
         private static void Main()
         {
+            var container = new Ninject.StandardKernel();
+            container.Bind();
             try
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm());
+                Application.Run(container.Get<MainForm>());
             }
             catch (Exception e)
             {

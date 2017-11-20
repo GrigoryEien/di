@@ -32,7 +32,7 @@ namespace FractalPainting.App
 			}
 			catch (Exception e)
 			{
-				MessageBox.Show(e.Message, "Не удалось загрузить настройки");
+				MessageBox.Show(e.Message, "Error occured");
 				return CreateDefaultSettings();
 			}
 		}
