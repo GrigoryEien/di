@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using FractalPainting.App.Actions;
+using FractalPainting.App.Fractals;
 using FractalPainting.Infrastructure;
 using Ninject;
 
@@ -22,7 +23,8 @@ namespace FractalPainting.App
 	        container.Bind<IUiAction>().To<ImageSettingsAction>();
 	        container.Bind<IUiAction>().To<PaletteSettingsAction>();
 	        container.Bind<Palette>().ToSelf().InSingletonScope();
-	        container.Bind<IImageHolder,PictureBoxImageHolder>().To<PictureBoxImageHolder>().InSingletonScope();
+	        container.Bind<IImageHolder, PictureBoxImageHolder>().To<PictureBoxImageHolder>().InSingletonScope();
+	        container.Bind<KochPainter>().ToSelf().InSingletonScope();
 
 			try {
                 Application.EnableVisualStyles();

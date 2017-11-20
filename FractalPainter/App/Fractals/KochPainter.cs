@@ -8,21 +8,20 @@ namespace FractalPainting.App.Fractals
 	{
 		private readonly IImageHolder imageHolder;
 		private readonly Palette palette;
-		private Size imageSize;
+		private Size ImageSize => imageHolder.GetImageSize();
 
 		public KochPainter(IImageHolder imageHolder, Palette palette)
 		{
 			this.imageHolder = imageHolder;
 			this.palette = palette;
-			imageSize = imageHolder.GetImageSize();
 		}
 
 		public void Paint()
 		{
 			using (var graphics = imageHolder.StartDrawing())
 			{
-				graphics.FillRectangle(new SolidBrush(palette.BackgroundColor), 0, 0, imageSize.Width, imageSize.Height);
-				DrawSegment(graphics, 0, imageSize.Height*0.9f, imageSize.Width, imageSize.Height*0.9f, true);
+				graphics.FillRectangle(new SolidBrush(palette.BackgroundColor), 0, 0, ImageSize.Width, ImageSize.Height);
+				DrawSegment(graphics, 0, ImageSize.Height*0.9f, ImageSize.Width, ImageSize.Height*0.9f, true);
 			}
 			imageHolder.UpdateUi();
 		}
