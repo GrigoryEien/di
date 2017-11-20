@@ -16,11 +16,13 @@ namespace FractalPainting.App
         {
             var container = new Ninject.StandardKernel();
 //	        container.Bind<MainForm>().To<MainForm>();
+	        container.Bind<IUiAction>().To<SaveImageAction>();
 	        container.Bind<IUiAction>().To<DragonFractalAction>();
 	        container.Bind<IUiAction>().To<KochFractalAction>();
 	        container.Bind<IUiAction>().To<ImageSettingsAction>();
 	        container.Bind<IUiAction>().To<PaletteSettingsAction>();
-	        container.Bind<IUiAction>().To<SaveImageAction>();
+	        container.Bind<Palette>().ToSelf().InSingletonScope();
+	        container.Bind<IImageHolder,PictureBoxImageHolder>().To<PictureBoxImageHolder>().InSingletonScope();
 
 			try {
                 Application.EnableVisualStyles();
