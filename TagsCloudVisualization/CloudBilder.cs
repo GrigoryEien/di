@@ -25,7 +25,7 @@ namespace TagsCloudVisualization
             this.circularCloudLayouter = circularCloudLayouter;
         }
 
-        public Bitmap BuildCloud(IEnumerable<string> lines, int count)
+        public Bitmap BuildCloud(IEnumerable<string> lines, int count, DrawingConfig drawingConfig)
         {
             var mostFrequenWords = filter.Filter(lines);
             var frequentWords = frequencyAnalyzer.GetFrequencyDict(mostFrequenWords).Take(count);
@@ -34,17 +34,17 @@ namespace TagsCloudVisualization
                 .Take(count)
                 .ToDictionary(x => x.Key, x => x.Value);
             mostFrequentWords = dictionaryNormalizer.NormalizeDictionary(mostFrequentWords);
-            var rects = CalculateRectsForWords(mostFrequentWords, new Point(0, 0));
-            return cloudDrawer.DrawMap(rects);
+            var rects = CalculateRectsForWords(mostFrequentWords, new Point(0, 0), drawingConfig.Font);
+            return cloudDrawer.DrawMap(rects,drawingConfig);
         }
 
-        private WordInRect[] CalculateRectsForWords(Dictionary<string, int> words, Point center)
+        private WordInRect[] CalculateRectsForWords(Dictionary<string, int> words, Point center, Font font)
         {
             var graphics = Graphics.FromImage(new Bitmap(1, 1));
 
             return words.Select(x =>
             {
-                var font = new Font(FontFamily.GenericSansSerif, x.Value, FontStyle.Regular, GraphicsUnit.Pixel);
+                font = new Font(font.FontFamily,x.Value);
                 var size = graphics.MeasureString(x.Key, font);
                 var rect = circularCloudLayouter.PutNextRectangle(size.ToSize());
                 return new WordInRect(x.Key, rect, font);
