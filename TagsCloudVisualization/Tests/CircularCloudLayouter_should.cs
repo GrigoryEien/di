@@ -10,12 +10,12 @@ namespace TagsCloudVisualization {
         private CircularCloudLayouter layouter;
         [SetUp]
         public void SetUp() {
-            layouter = new CircularCloudLayouter(new Point(20, 20));
+            layouter = new CircularCloudLayouter(new Point(20, 20),1);
         }
 
         [Test]
         public void CreateNewLayouter_WhenPointIsPassed() {
-            layouter = new CircularCloudLayouter(new Point(20, 20));
+            layouter = new CircularCloudLayouter(new Point(20, 20),1);
         }
         [Test]
         public void ReturnRectangle_WhenPassedSize() {
