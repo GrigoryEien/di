@@ -2,7 +2,7 @@
 
 namespace TagsCloudVisualization.Interfaces
 {
-    public interface ICircularCloudLayouter
+    public interface ICloudLayouter
     {
         Rectangle PutNextRectangle(Size size);
     }

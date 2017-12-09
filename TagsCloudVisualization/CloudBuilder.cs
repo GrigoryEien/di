@@ -6,23 +6,23 @@ using TagsCloudVisualization.Interfaces;
 
 namespace TagsCloudVisualization
 {
-    public class CloudBilder : ICloudBuilder
+    public class CloudBuilder : ICloudBuilder
 
     {
         private IWordsFilter filter;
         private IFrequencyAnalyzer frequencyAnalyzer;
         private ICloudDrawer cloudDrawer;
         private IDictionaryNormalizer dictionaryNormalizer;
-        private ICircularCloudLayouter circularCloudLayouter;
+        private ICloudLayouter cloudLayouter;
 
-        public CloudBilder(IDictionaryNormalizer dictionaryNormalizer, IWordsFilter filter,
-            IFrequencyAnalyzer frequencyAnalyzer, ICloudDrawer cloudDrawer, ICircularCloudLayouter circularCloudLayouter)
+        public CloudBuilder(IDictionaryNormalizer dictionaryNormalizer, IWordsFilter filter,
+            IFrequencyAnalyzer frequencyAnalyzer, ICloudDrawer cloudDrawer, ICloudLayouter cloudLayouter)
         {
             this.dictionaryNormalizer = dictionaryNormalizer;
             this.filter = filter;
             this.frequencyAnalyzer = frequencyAnalyzer;
             this.cloudDrawer = cloudDrawer;
-            this.circularCloudLayouter = circularCloudLayouter;
+            this.cloudLayouter = cloudLayouter;
         }
 
         public Bitmap BuildCloud(IEnumerable<string> lines, int count, DrawingConfig drawingConfig)
@@ -46,7 +46,7 @@ namespace TagsCloudVisualization
             {
                 font = new Font(font.FontFamily,x.Value);
                 var size = graphics.MeasureString(x.Key, font);
-                var rect = circularCloudLayouter.PutNextRectangle(size.ToSize());
+                var rect = cloudLayouter.PutNextRectangle(size.ToSize());
                 return new WordInRect(x.Key, rect, font);
             }).ToArray();
         }

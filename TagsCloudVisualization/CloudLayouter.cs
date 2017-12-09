@@ -6,7 +6,7 @@ using TagsCloudVisualization.Interfaces;
 
 namespace TagsCloudVisualization
 {
-    public class CircularCloudLayouter : ICircularCloudLayouter
+    public class CloudLayouter : ICloudLayouter
     {
         private readonly Point center;
         private readonly double HorizontalExtensionCoeff;
@@ -15,7 +15,7 @@ namespace TagsCloudVisualization
         private double angle;
 
 
-        public CircularCloudLayouter(Point center, double horizontalExtension)
+        public CloudLayouter(Point center, double horizontalExtension)
         {
             HorizontalExtensionCoeff = horizontalExtension;
             this.center = center;

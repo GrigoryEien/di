@@ -10,9 +10,9 @@ namespace TagsCloudVisualization
 
 		public WordInRect(string word, Rectangle rect, Font font)
 		{
-			this.Word = word;
-			this.Rect = rect;
-			this.Font = font;
+			Word = word;
+			Rect = rect;
+			Font = font;
 		}
 	}
 }

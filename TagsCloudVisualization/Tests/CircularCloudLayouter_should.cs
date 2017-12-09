@@ -7,15 +7,15 @@ using System.Drawing;
 namespace TagsCloudVisualization {
     [TestFixture]
     public class CircularCloudLayouter_should {
-        private CircularCloudLayouter layouter;
+        private CloudLayouter layouter;
         [SetUp]
         public void SetUp() {
-            layouter = new CircularCloudLayouter(new Point(20, 20),1);
+            layouter = new CloudLayouter(new Point(20, 20),1);
         }
 
         [Test]
         public void CreateNewLayouter_WhenPointIsPassed() {
-            layouter = new CircularCloudLayouter(new Point(20, 20),1);
+            layouter = new CloudLayouter(new Point(20, 20),1);
         }
         [Test]
         public void ReturnRectangle_WhenPassedSize() {

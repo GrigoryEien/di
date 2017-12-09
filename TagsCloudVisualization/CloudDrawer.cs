@@ -4,25 +4,28 @@ using TagsCloudVisualization.Interfaces;
 
 namespace TagsCloudVisualization
 {
-	public class CloudDrawer : ICloudDrawer
-	{
-		private ILayoutNormalizer layoutNormalizer;
+    public class CloudDrawer : ICloudDrawer
+    {
+        private ILayoutNormalizer layoutNormalizer;
 
-		public CloudDrawer(ILayoutNormalizer layoutNormalizer)
-		{
-			this.layoutNormalizer = layoutNormalizer;
-		}
-		
-		public Bitmap DrawMap(IEnumerable<WordInRect> words, DrawingConfig config) {
-			var mainRect = layoutNormalizer.GetMainRect(words);
-			var normalizedWords = layoutNormalizer.ShiftLayout(words, mainRect);
-			var bitmap = new Bitmap(mainRect.Width, mainRect.Height);
-			var graphics = Graphics.FromImage(bitmap);
+        public CloudDrawer(ILayoutNormalizer layoutNormalizer)
+        {
+            this.layoutNormalizer = layoutNormalizer;
+        }
 
-			foreach (var word in normalizedWords) {
-				graphics.DrawString(word.Word, word.Font, config.Brush, word.Rect, StringFormat.GenericTypographic);
-			}
-			return bitmap;
-		}
-	}
+        public Bitmap DrawMap(IEnumerable<WordInRect> words, DrawingConfig config)
+        {
+            var mainRect = layoutNormalizer.GetMainRect(words);
+            var normalizedWords = layoutNormalizer.ShiftLayout(words, mainRect);
+            var bitmap = new Bitmap(mainRect.Width, mainRect.Height);
+            var graphics = Graphics.FromImage(bitmap);
+
+            foreach (var word in normalizedWords)
+            {
+                graphics.DrawString(word.Word, word.Font, config.GenerateBrush(word), word.Rect,
+                    StringFormat.GenericTypographic);
+            }
+            return new Bitmap(bitmap, config.Size);
+        }
+    }
 }
