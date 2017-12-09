@@ -35,6 +35,9 @@
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da">
       <HintPath>packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+      <HintPath>packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32">
       <HintPath>packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
     </Reference>
@@ -50,6 +53,9 @@
     <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <HintPath>packages\Microsoft.Office.Interop.Word.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
     </Reference>
+    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920">
+      <HintPath>packages\Moq.4.8.0-rc1\lib\net45\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -63,6 +69,9 @@
     <Reference Include="System.Reflection.TypeExtensions, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>packages\System.Reflection.TypeExtensions.4.4.0\lib\net461\System.Reflection.TypeExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>packages\System.Threading.Tasks.Extensions.4.4.0\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -73,25 +82,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloudLayouter.cs" />
-    <Compile Include="CloudBuilder.cs" />
-    <Compile Include="CloudDrawer.cs" />
-    <Compile Include="CloudSaver.cs" />
-    <Compile Include="DictionaryNormalizer.cs" />
-    <Compile Include="DrawingConfig.cs" />
-    <Compile Include="FileReader.cs" />
-    <Compile Include="FrequencyAnalyzer.cs" />
-    <Compile Include="Interfaces\ICloudLayouter.cs" />
-    <Compile Include="Interfaces\ICloudBuilder.cs" />
-    <Compile Include="Interfaces\ICloudDrawer.cs" />
-    <Compile Include="Interfaces\ICloudSaver.cs" />
-    <Compile Include="Interfaces\IDictionaryNormalizer.cs" />
-    <Compile Include="Interfaces\IDrawingConfig.cs" />
-    <Compile Include="Interfaces\IFileReader.cs" />
-    <Compile Include="Interfaces\IFrequencyAnalyzer.cs" />
-    <Compile Include="Interfaces\ILayoutNormalizer.cs" />
-    <Compile Include="Interfaces\IWordsFilter.cs" />
-    <Compile Include="LayoutNormalizer.cs" />
+    <Compile Include="CloudBuilding\CloudBuilder.cs" />
+    <Compile Include="CloudBuilding\CloudLayouter.cs" />
+    <Compile Include="CloudBuilding\CloudSaver.cs" />
+    <Compile Include="CloudBuilding\ICloudBuilder.cs" />
+    <Compile Include="CloudBuilding\ICloudLayouter.cs" />
+    <Compile Include="CloudBuilding\ICloudSaver.cs" />
+    <Compile Include="CloudBuilding\ILayoutNormalizer.cs" />
+    <Compile Include="CloudBuilding\LayoutNormalizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\CircularCloudLayouter_should.cs" />
@@ -99,8 +97,19 @@
     <Compile Include="Tests\GeneralTests.cs" />
     <Compile Include="Tests\WordsFilter_should.cs" />
     <Compile Include="Tests\LayoutNormalizer_should.cs" />
+    <Compile Include="Visualization\CloudDrawer.cs" />
+    <Compile Include="Visualization\DrawingConfig.cs" />
+    <Compile Include="Visualization\ICloudDrawer.cs" />
+    <Compile Include="Visualization\IDrawingConfig.cs" />
     <Compile Include="WordInRect.cs" />
-    <Compile Include="WordsFilter.cs" />
+    <Compile Include="WordsExtraction\DictionaryNormalizer.cs" />
+    <Compile Include="WordsExtraction\FileReader.cs" />
+    <Compile Include="WordsExtraction\FrequencyAnalyzer.cs" />
+    <Compile Include="WordsExtraction\IDictionaryNormalizer.cs" />
+    <Compile Include="WordsExtraction\IFileReader.cs" />
+    <Compile Include="WordsExtraction\IFrequencyAnalyzer.cs" />
+    <Compile Include="WordsExtraction\IWordsFilter.cs" />
+    <Compile Include="WordsExtraction\WordsFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

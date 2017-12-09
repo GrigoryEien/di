@@ -14,6 +14,7 @@ using CommandLine;
 using CommandLine.Text;
 using TagsCloudVisualization.Interfaces;
 using Color = System.Windows.Media.Color;
+using ColorConverter = System.Windows.Media.ColorConverter;
 
 namespace TagsCloudVisualization
 {
@@ -23,7 +24,6 @@ namespace TagsCloudVisualization
         {
             var options = new Options();
             CommandLine.Parser.Default.ParseArguments(args, options);
-
 
             if (options.Source is null || options.Destination is null)
             {
@@ -42,7 +42,7 @@ namespace TagsCloudVisualization
                 Console.WriteLine(e.Message);
                 return;
             }
-           
+
             var builder = new ContainerBuilder();
             builder.RegisterInstance(new FrequencyAnalyzer()).As<IFrequencyAnalyzer>();
             builder.RegisterInstance(new DictionaryNormalizer()).As<IDictionaryNormalizer>();
@@ -59,7 +59,7 @@ namespace TagsCloudVisualization
             var size = new Size(options.Width, options.Heigth);
             var font = new Font(options.FontName, 10);
             var brushColor = new SolidBrush(color);
-            var drawingConfig = new DrawingConfig(font,brushColor,size);
+            var drawingConfig = new DrawingConfig(font, brushColor, size);
 
             var container = builder.Build();
             var cloudBilder = container.Resolve<ICloudBuilder>();
@@ -71,10 +71,9 @@ namespace TagsCloudVisualization
 
         private static System.Drawing.Color GetColorByName(string name)
         {
-            var brush = (SolidColorBrush) new BrushConverter().ConvertFromString(name);
-            var solidBrushColor = brush.Color;
-            return System.Drawing.Color.FromArgb(solidBrushColor.A, solidBrushColor.R, solidBrushColor.G,
-                solidBrushColor.B);
+            var color = (Color)ColorConverter.ConvertFromString(name);
+            return System.Drawing.Color.FromArgb(color.A, color.R, color.G,
+                color.B);
         }
     }
 
@@ -93,21 +92,21 @@ namespace TagsCloudVisualization
         public int HorizontalExtensionCoefficient { get; set; }
 
         [Option("clr", DefaultValue = "Magenta", HelpText = "Color")]
-        public string BrushColor { get; set; };
+        public string BrushColor { get; set; }
 
         [Option('f', "font", DefaultValue = "Arial", HelpText = "Font name")]
         public string FontName { get; set; }
 
         [Option("bw", DefaultValue = "function-words.txt", HelpText = "File with banned words")]
         public string BannedWords { get; set; }
-        
-        [Option("ext",DefaultValue = "png", HelpText = "Output file extension")]
+
+        [Option("ext", DefaultValue = "png", HelpText = "Output file extension")]
         public string Extension { get; set; }
 
         [Option("width", DefaultValue = 1000, HelpText = "Output file width")]
         public int Width { get; set; }
-        
-        [Option("heigth", DefaultValue = 1000, HelpText = "Output file heigth")]
+
+        [Option("height", DefaultValue = 1000, HelpText = "Output file heigth")]
         public int Heigth { get; set; }
     }
 }
