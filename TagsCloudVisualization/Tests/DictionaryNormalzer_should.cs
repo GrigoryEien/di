@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
+using TagsCloudVisualization.WordsExtraction;
 
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.Tests
 {
 	public class DictionaryNormalzer_should
 	{

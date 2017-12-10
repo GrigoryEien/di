@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using System.Drawing;
+using NUnit.Framework;
+using TagsCloudVisualization.CloudBuilding;
 
-
-namespace TagsCloudVisualization {
+namespace TagsCloudVisualization.Tests {
     [TestFixture]
-    public class CircularCloudLayouter_should {
+    public class CloudLayouter_should {
         private CloudLayouter layouter;
         [SetUp]
         public void SetUp() {

@@ -1,16 +1,20 @@
 ﻿using System.Drawing;
-using System.Windows.Media;
-using TagsCloudVisualization.Interfaces;
-using Brush = System.Drawing.Brush;
+using ColorConverter = System.Windows.Media.ColorConverter;
 
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.Visualization
 {
     public class DrawingConfig : IDrawingConfig
     {
-        public DrawingConfig(Font font, SolidBrush brush, Size size)
+        public Font Font { get; set; }
+        public Size Size { get; set; }
+        private SolidBrush Brush;
+
+        public DrawingConfig(string fontName, string brushColor, Size size)
         {
-            Font = font;
-            Brush = brush;
+            var color = DrawingConfig.GetColorByName(brushColor);
+            
+            Font = new Font(fontName, 10);
+            Brush = new SolidBrush(color);
             Size = size;
         }
 
@@ -19,9 +23,12 @@ namespace TagsCloudVisualization
             return Brush;
         }
 
-        public Font Font { get; set; }
-        public Size Size { get; set; }
-        private SolidBrush Brush;
-        
+
+        public static System.Drawing.Color GetColorByName(string name)
+        {
+            var color = (System.Windows.Media.Color) ColorConverter.ConvertFromString(name);
+            return System.Drawing.Color.FromArgb(color.A, color.R, color.G,
+                color.B);
+        }
     }
 }

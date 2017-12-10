@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
-using TagsCloudVisualization.Interfaces;
+using TagsCloudVisualization.Visualization;
+using TagsCloudVisualization.WordsExtraction;
 
-namespace TagsCloudVisualization
+namespace TagsCloudVisualization.CloudBuilding
 {
     public class CloudBuilder : ICloudBuilder
 

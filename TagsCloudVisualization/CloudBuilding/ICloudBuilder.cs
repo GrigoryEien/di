@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using TagsCloudVisualization.Visualization;
 
-namespace TagsCloudVisualization.Interfaces
+namespace TagsCloudVisualization.CloudBuilding
 {
     public interface ICloudBuilder
     {
