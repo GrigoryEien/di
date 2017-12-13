@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using Autofac;
+using CommandLine.Text;
 using TagsCloudVisualization.CloudBuilding;
 using TagsCloudVisualization.Visualization;
 using TagsCloudVisualization.WordsExtraction;
@@ -18,10 +19,17 @@ namespace TagsCloudVisualization
         {
             var options = new Options();
             CommandLine.Parser.Default.ParseArguments(args, options);
+            var help = HelpText.AutoBuild(options);
 
+            if (options.HelpRequested)
+            {
+                Console.WriteLine(help);
+                return;
+            }
             if (options.Source is null || options.Destination is null)
             {
                 Console.WriteLine("Destination and source are required");
+                Console.WriteLine(help);
                 return;
             }
 
