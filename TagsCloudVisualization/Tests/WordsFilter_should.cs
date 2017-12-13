@@ -17,10 +17,15 @@ namespace TagsCloudVisualization.Tests
             [SetUp]
             public void SetUp()
             {
+                
+                var bannedLines = new string[]
+                {
+                    "I have some",
+                    "Should be"
+                };
                 wordsFilter =
-                    new WordsFilter(Path.Combine(TestContext.CurrentContext.TestDirectory, "function-words.txt"));
+                    new WordsFilter(bannedLines);
             }
-
 
             [Test]
             public void ShouldCountOnlyWordsWithLengthGreaterOrEquallTo()

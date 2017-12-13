@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 using Autofac;
 using TagsCloudVisualization.CloudBuilding;
 using TagsCloudVisualization.Visualization;
@@ -26,6 +27,7 @@ namespace TagsCloudVisualization
 
 
             IEnumerable<string> lines;
+            IEnumerable<string> bannedWords = new List<string>();
             try
             {
                 lines = File.ReadLines(options.Source);
@@ -36,12 +38,22 @@ namespace TagsCloudVisualization
                 return;
             }
 
+            try
+            {
+                bannedWords = File.ReadLines(options.BannedWords);
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine("No words will be filtered");
+            }
+            
             var builder = new ContainerBuilder();
             builder.RegisterInstance(new FrequencyAnalyzer()).As<IFrequencyAnalyzer>();
             builder.RegisterInstance(new DictionaryNormalizer()).As<IDictionaryNormalizer>();
             builder.RegisterInstance(new CloudLayouter(new Point(0, 0), options.HorizontalExtensionCoefficient))
                 .As<ICloudLayouter>();
-            builder.RegisterInstance(new WordsFilter(options.BannedWords)).As<IWordsFilter>();
+            builder.RegisterInstance(new WordsFilter(bannedWords)).As<IWordsFilter>();
             builder.RegisterInstance(new LayoutNormalizer()).As<ILayoutNormalizer>();
             builder.RegisterType<CloudBuilder>().As<ICloudBuilder>();
             builder.RegisterType<CloudDrawer>().As<ICloudDrawer>();

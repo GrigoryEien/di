@@ -24,10 +24,10 @@ namespace TagsCloudVisualization.Visualization
         }
 
 
-        public static System.Drawing.Color GetColorByName(string name)
+        public static Color GetColorByName(string name)
         {
             var color = (System.Windows.Media.Color) ColorConverter.ConvertFromString(name);
-            return System.Drawing.Color.FromArgb(color.A, color.R, color.G,
+            return Color.FromArgb(color.A, color.R, color.G,
                 color.B);
         }
     }

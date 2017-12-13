@@ -17,8 +17,10 @@ namespace TagsCloudVisualization.Tests
         [TestFixture]
         public class GeneralTests_Should
         {
-            [Test]
-            public void GenerateBitmapOfPassedSize()
+            private ICloudBuilder cloudBuilder;
+         
+            [SetUp]
+            public void SetUp()
             {
                 var wordsFilterMock = Substitute.For<IWordsFilter>();
                 wordsFilterMock.Filter(Arg.Any<IEnumerable<string>>()).Returns(Enumerable.Repeat("mock", 100));
@@ -46,22 +48,22 @@ namespace TagsCloudVisualization.Tests
                 builder.RegisterType<CloudDrawer>().As<ICloudDrawer>();
                 builder.RegisterInstance(fileReaderMock).As<IFileReader>();
                 builder.RegisterInstance(new CloudSaver()).As<ICloudSaver>();
+                var container = builder.Build();
+                cloudBuilder = container.Resolve<ICloudBuilder>();
+
+            }
+            
+            [Test]
+            public void GenerateBitmapOfPassedSize()
+            {
 
                 var size = new Size(500, 700);
                 var drawingConfig = new DrawingConfig("Arial", "Red", size);
-                var container = builder.Build();
-                var cloudBilder = container.Resolve<ICloudBuilder>();
 
-
-                var cloud = cloudBilder.BuildCloud(GenerateRandomStrings(100), 100, drawingConfig);
+                var cloud = cloudBuilder.BuildCloud(GenerateRandomStrings(100), 100, drawingConfig);
 
                 cloud.Width.Should().Be(500);
                 cloud.Height.Should().Be(700);
-            }
-
-            [Test]
-            public void DoSomething_WhenSomething()
-            {
             }
 
             private static string[] GenerateRandomStrings(int count)

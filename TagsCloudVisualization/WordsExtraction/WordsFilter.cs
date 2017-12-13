@@ -19,9 +19,9 @@ namespace TagsCloudVisualization.WordsExtraction
 
         private static string[] bannedWords;
 
-        public WordsFilter(string pathToTxtWithBannedWords)
+        public WordsFilter(IEnumerable<string> linesOfBannedWords)
         {
-            bannedWords = File.ReadLines(pathToTxtWithBannedWords).SelectMany(x => x.Split(' '))
+            bannedWords = linesOfBannedWords.SelectMany(x => x.Split(' '))
                 .Select(x => x.ToUpper()).ToArray();
         }
 
