@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using CommandLine.Text;
 
 namespace TagsCloudVisualization
 {
@@ -33,9 +34,12 @@ namespace TagsCloudVisualization
 
         [Option("height", DefaultValue = 1000, HelpText = "Output file heigth")]
         public int Heigth { get; set; }
-        
-        [Option('h', "help", HelpText = "Prints help")]
-        public bool HelpRequested { get; set; }
+                
+        [HelpOption]
+        public string GetUsage() {
+            return HelpText.AutoBuild(this,
+                (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
 
     }
 }
