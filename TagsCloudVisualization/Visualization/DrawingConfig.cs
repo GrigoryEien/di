@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using ResultOf;
 using ColorConverter = System.Windows.Media.ColorConverter;
 
 namespace TagsCloudVisualization.Visualization
@@ -11,8 +13,8 @@ namespace TagsCloudVisualization.Visualization
 
         public DrawingConfig(string fontName, string brushColor, Size size)
         {
-            var color = DrawingConfig.GetColorByName(brushColor);
-            
+            var color = GetColorByName(brushColor);
+
             Font = new Font(fontName, 10);
             Brush = new SolidBrush(color);
             Size = size;
@@ -26,7 +28,15 @@ namespace TagsCloudVisualization.Visualization
 
         public static Color GetColorByName(string name)
         {
-            var color = (System.Windows.Media.Color) ColorConverter.ConvertFromString(name);
+            var convertationResult = Result.Of(() =>
+                (System.Windows.Media.Color) ColorConverter.ConvertFromString(name));
+
+            if (!convertationResult.IsSuccess)
+            {
+                Console.WriteLine($"{name} is not a valid color name. Magenta will be used instead");
+                return Color.Magenta;
+            }
+            var color = convertationResult.Value;
             return Color.FromArgb(color.A, color.R, color.G,
                 color.B);
         }

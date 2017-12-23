@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using Autofac;
 using CommandLine.Text;
+using ResultOf;
 using TagsCloudVisualization.CloudBuilding;
 using TagsCloudVisualization.Visualization;
 using TagsCloudVisualization.WordsExtraction;
@@ -18,7 +19,7 @@ namespace TagsCloudVisualization
         static void Main(string[] args)
         {
             var options = new Options();
-            CommandLine.Parser.Default.ParseArguments(args, options);            
+            CommandLine.Parser.Default.ParseArguments(args, options);
             if (options.Source is null || options.Destination is null)
             {
                 Console.WriteLine("Destination and source are required. Use -h or --help for help");
@@ -27,27 +28,26 @@ namespace TagsCloudVisualization
 
 
             IEnumerable<string> lines;
-            IEnumerable<string> bannedWords = new List<string>();
-            try
+            var resultOfReadLines = Result.Of(() => File.ReadLines(options.Source));
+            if (resultOfReadLines.IsSuccess)
+                lines = resultOfReadLines.Value;
+            else
             {
-                lines = File.ReadLines(options.Source);
-            }
-            catch (FileNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(resultOfReadLines.Error);
                 return;
             }
 
-            try
+            IEnumerable<string> bannedWords = new List<string>();
+            var resultOfReadBannedWords = Result.Of(() => File.ReadLines(options.BannedWords));
+
+            if (resultOfReadBannedWords.IsSuccess)
+                bannedWords = resultOfReadBannedWords.Value;
+            else
             {
-                bannedWords = File.ReadLines(options.BannedWords);
-            }
-            catch (FileNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(resultOfReadBannedWords.Error);
                 Console.WriteLine("No words will be filtered");
             }
-            
+
             var builder = new ContainerBuilder();
             builder.RegisterInstance(new FrequencyAnalyzer()).As<IFrequencyAnalyzer>();
             builder.RegisterInstance(new DictionaryNormalizer()).As<IDictionaryNormalizer>();
@@ -60,8 +60,19 @@ namespace TagsCloudVisualization
             builder.RegisterInstance(new FileReader()).As<IFileReader>();
             builder.RegisterInstance(new CloudSaver()).As<ICloudSaver>();
 
-            var size = new Size(options.Width, options.Heigth);
+            if (options.Width <= 0)
+            {
+                Console.WriteLine("Width should be positive");
+                return;
+            }
             
+            if (options.Heigth <= 0)
+            {
+                Console.WriteLine("Height should be positive");
+                return;
+            }
+            var size = new Size(options.Width, options.Heigth);
+
             var drawingConfig = new DrawingConfig(options.FontName, options.BrushColor, size);
 
             var container = builder.Build();
@@ -71,6 +82,5 @@ namespace TagsCloudVisualization
             var cloud = cloudBilder.BuildCloud(lines, options.Count, drawingConfig);
             new CloudSaver().SaveCloud(cloud, options.Destination, options.Extension);
         }
-
     }
 }
