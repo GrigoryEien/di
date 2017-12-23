@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 using Autofac;
-using CommandLine.Text;
-using ResultOf;
 using TagsCloudVisualization.CloudBuilding;
 using TagsCloudVisualization.Visualization;
 using TagsCloudVisualization.WordsExtraction;
-using Color = System.Windows.Media.Color;
-using ColorConverter = System.Windows.Media.ColorConverter;
 
 namespace TagsCloudVisualization
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using ResultOf;
 using ColorConverter = System.Windows.Media.ColorConverter;
 
 namespace TagsCloudVisualization.Visualization
