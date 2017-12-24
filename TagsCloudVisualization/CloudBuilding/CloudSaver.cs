@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Reflection;
 
 namespace TagsCloudVisualization.CloudBuilding
 {
@@ -7,13 +10,25 @@ namespace TagsCloudVisualization.CloudBuilding
     {
         public Result<None> SaveCloud(Bitmap cloud, string filename, string extension)
         {
-            if (extension != "png" && extension != "bmp")
+            var format = GetImageFormat(extension);
+            if (format == null)
                 return Result.Fail<None>(
-                    $"Unsupported extension: '{extension}'. Extension should be either png or bmp");
+                    $"Unsupported extension: '{extension}'. Try another one.");
             var fullname = filename + "." + extension;
-            cloud.Save(fullname);
-            Console.WriteLine($"Saved to {fullname}");
-            return Result.Ok();
+            return Result.OfAction(() => cloud.Save(fullname, format));
+        }
+
+        private static ImageFormat GetImageFormat(string extension)
+        {
+            ImageFormat result = null;
+            var prop = typeof(ImageFormat)
+                .GetProperties()
+                .FirstOrDefault(p => p.Name.Equals(extension, StringComparison.InvariantCultureIgnoreCase));
+            if (prop != null)
+            {
+                result = prop.GetValue(prop) as ImageFormat;
+            }
+            return result;
         }
     }
 }
