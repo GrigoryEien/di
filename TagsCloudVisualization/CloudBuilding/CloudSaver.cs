@@ -11,24 +11,20 @@ namespace TagsCloudVisualization.CloudBuilding
         public Result<None> SaveCloud(Bitmap cloud, string filename, string extension)
         {
             var format = GetImageFormat(extension);
-            if (format == null)
-                return Result.Fail<None>(
-                    $"Unsupported extension: '{extension}'. Try another one.");
+            if (!format.IsSuccess)
+                return Result.Fail<None>(format.Error);
             var fullname = filename + "." + extension;
-            return Result.OfAction(() => cloud.Save(fullname, format));
+            return Result.OfAction(() => cloud.Save(fullname, format.Value));
         }
 
-        private static ImageFormat GetImageFormat(string extension)
+        private static Result<ImageFormat> GetImageFormat(string extension)
         {
-            ImageFormat result = null;
             var prop = typeof(ImageFormat)
                 .GetProperties()
                 .FirstOrDefault(p => p.Name.Equals(extension, StringComparison.InvariantCultureIgnoreCase));
-            if (prop != null)
-            {
-                result = prop.GetValue(prop) as ImageFormat;
-            }
-            return result;
+            if (prop == null)
+                return Result.Fail<ImageFormat>($"Unknown image extension '{extension}'. Try another one");
+            return Result.Ok(prop.GetValue(prop) as ImageFormat);
         }
     }
 }
