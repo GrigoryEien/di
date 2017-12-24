@@ -13,7 +13,7 @@ namespace TagsCloudVisualization.Visualization
             this.layoutNormalizer = layoutNormalizer;
         }
 
-        public Bitmap DrawMap(IEnumerable<WordInRect> words, DrawingConfig config)
+        public Bitmap DrawMap(IEnumerable<WordInRect> words, IDrawingConfig config)
         {
             var mainRect = layoutNormalizer.GetMainRect(words);
             var normalizedWords = layoutNormalizer.ShiftLayout(words, mainRect);

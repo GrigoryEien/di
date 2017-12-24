@@ -26,7 +26,7 @@ namespace TagsCloudVisualization.Tests
                 wordsFilterMock.Filter(Arg.Any<IEnumerable<string>>()).Returns(Enumerable.Repeat("mock", 100));
                 
                 var fileReaderMock = Substitute.For<IFileReader>();
-                fileReaderMock.ReadFile(Arg.Any<string>()).Returns(Enumerable.Repeat("mock", 100));
+                fileReaderMock.ReadFile(Arg.Any<string>()).Returns(Result.Ok(Enumerable.Repeat("mock", 100)));
 
                 var layoutNormalizerMock = Substitute.For<ILayoutNormalizer>();
                 var rect = new Rectangle(0, 0, 1000, 1000);

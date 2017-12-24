@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using Autofac;
 using TagsCloudVisualization.CloudBuilding;
 using TagsCloudVisualization.Visualization;
@@ -15,34 +14,48 @@ namespace TagsCloudVisualization
         {
             var options = new Options();
             CommandLine.Parser.Default.ParseArguments(args, options);
-            if (options.Source is null || options.Destination is null)
+
+            var optionStatus = Options.CheckOptions(options);
+            if (!optionStatus.IsSuccess)
             {
-                Console.WriteLine("Destination and source are required. Use -h or --help for help");
+                Console.WriteLine(optionStatus.Error);
                 return;
             }
 
+            var fileReader = new FileReader();
 
-            IEnumerable<string> lines;
-            var resultOfReadLines = Result.Of(() => File.ReadLines(options.Source));
-            if (resultOfReadLines.IsSuccess)
-                lines = resultOfReadLines.Value;
-            else
+            var resultOfSourceReading = fileReader.ReadFile(options.Source);
+            if (!resultOfSourceReading.IsSuccess)
             {
-                Console.WriteLine(resultOfReadLines.Error);
+                Console.WriteLine(resultOfSourceReading.Error);
+                Console.WriteLine("Check presence and corretnes of the file and try again.");
                 return;
             }
+            var lines = resultOfSourceReading.Value;
 
-            IEnumerable<string> bannedWords = new List<string>();
-            var resultOfReadBannedWords = Result.Of(() => File.ReadLines(options.BannedWords));
 
-            if (resultOfReadBannedWords.IsSuccess)
-                bannedWords = resultOfReadBannedWords.Value;
-            else
+            var resultOfBannedWordsReading = fileReader.ReadFile(options.BannedWords);
+            if (!resultOfBannedWordsReading.IsSuccess)
             {
-                Console.WriteLine(resultOfReadBannedWords.Error);
-                Console.WriteLine("No words will be filtered");
+                Console.WriteLine(resultOfSourceReading.Error);
+                Console.WriteLine(
+                    "Provide correct path to file with banned words in txt format. Otherwise no words will be filtered.");
             }
+            var bannedWords = resultOfBannedWordsReading.Value;
+            var container = BuildContainer(options, fileReader, bannedWords);
+            
+            var cloudBilder = container.Resolve<ICloudBuilder>();
+            var cloud = cloudBilder.BuildCloud(lines, options.Count, container.Resolve<IDrawingConfig>());
+            var result = container.Resolve<ICloudSaver>().SaveCloud(cloud, options.Destination, options.Extension);
+            
+            if (result.IsSuccess) return;
+            Console.WriteLine(
+                "Cannot save file. Make sure that you've provided correct extensions and have writing access to destination directory");
+            Console.WriteLine(result.Error);
+        }
 
+        private static IContainer BuildContainer(Options options, IFileReader fileReader, IEnumerable<string> bannedWords)
+        {
             var builder = new ContainerBuilder();
             builder.RegisterInstance(new FrequencyAnalyzer()).As<IFrequencyAnalyzer>();
             builder.RegisterInstance(new DictionaryNormalizer()).As<IDictionaryNormalizer>();
@@ -52,30 +65,15 @@ namespace TagsCloudVisualization
             builder.RegisterInstance(new LayoutNormalizer()).As<ILayoutNormalizer>();
             builder.RegisterType<CloudBuilder>().As<ICloudBuilder>();
             builder.RegisterType<CloudDrawer>().As<ICloudDrawer>();
-            builder.RegisterInstance(new FileReader()).As<IFileReader>();
+            builder.RegisterInstance(fileReader).As<IFileReader>();
             builder.RegisterInstance(new CloudSaver()).As<ICloudSaver>();
 
-            if (options.Width <= 0)
-            {
-                Console.WriteLine("Width should be positive");
-                return;
-            }
-            
-            if (options.Heigth <= 0)
-            {
-                Console.WriteLine("Height should be positive");
-                return;
-            }
-            var size = new Size(options.Width, options.Heigth);
+            var size = new Size(options.Width, options.Height);
+            builder.RegisterInstance(new DrawingConfig(options.FontName, options.BrushColor, size))
+                .As<IDrawingConfig>();
 
-            var drawingConfig = new DrawingConfig(options.FontName, options.BrushColor, size);
-
-            var container = builder.Build();
-            var cloudBilder = container.Resolve<ICloudBuilder>();
-
-
-            var cloud = cloudBilder.BuildCloud(lines, options.Count, drawingConfig);
-            new CloudSaver().SaveCloud(cloud, options.Destination, options.Extension);
+            return builder.Build();
         }
+
     }
 }

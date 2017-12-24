@@ -31,8 +31,8 @@ namespace TagsCloudVisualization.Tests
 					{"Zero", 10}
 				};
 
-				var dictinonaryNormalizer = new DictionaryNormalizer();
-				var actualDict = dictinonaryNormalizer.NormalizeDictionary(dict);
+				var dictionaryNormalizer = new DictionaryNormalizer();
+				var actualDict = dictionaryNormalizer.NormalizeDictionary(dict);
 				actualDict.ShouldBeEquivalentTo(expectedDict);
 			}
 		}

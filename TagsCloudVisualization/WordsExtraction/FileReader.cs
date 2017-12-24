@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace TagsCloudVisualization.WordsExtraction
 {
     public class FileReader : IFileReader
     {
-        public IEnumerable<string> ReadFile(string filename)
+        public Result<IEnumerable<string>> ReadFile(string filename)
         {
-            if (filename.EndsWith(".txt"))
-                return File.ReadLines(filename);
-            
-            throw new FormatException(
-                $"Format of {filename} is unsupported. Supported formats are: txt, doc, docx");
+            if (!filename.EndsWith(".txt"))
+                return Result.Fail<IEnumerable<string>>(
+                    $"Format of {filename} is unsupported. Supported formats are: txt, doc, docx");
+            return Result.Of(() => File.ReadLines(filename));
         }
     }
 }

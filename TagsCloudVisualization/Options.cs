@@ -32,14 +32,25 @@ namespace TagsCloudVisualization
         [Option("width", DefaultValue = 1000, HelpText = "Output file width")]
         public int Width { get; set; }
 
-        [Option("height", DefaultValue = 1000, HelpText = "Output file heigth")]
-        public int Heigth { get; set; }
-                
+        [Option("height", DefaultValue = 1000, HelpText = "Output file height")]
+        public int Height { get; set; }
+
         [HelpOption]
-        public string GetUsage() {
+        public string GetUsage()
+        {
             return HelpText.AutoBuild(this,
-                (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+                (current) => HelpText.DefaultParsingErrorsHandler(this, current));
         }
 
+        public static Result<None> CheckOptions(Options options)
+        {
+            if (options.Source is null || options.Destination is null)
+                return Result.Fail<None>("Destination and source are required. Use -h or --help for help");
+            if (options.Width <= 0)
+                return Result.Fail<None>("Width should be positive");
+            if (options.Height <= 0)
+                return Result.Fail<None>("Height should be positive");
+            return Result.Ok();
+        }
     }
 }

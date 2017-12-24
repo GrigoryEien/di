@@ -6,6 +6,6 @@ namespace TagsCloudVisualization.CloudBuilding
 {
     public interface ICloudBuilder
     {
-         Bitmap BuildCloud(IEnumerable<string> lines, int count, DrawingConfig drawingConfig);
+         Bitmap BuildCloud(IEnumerable<string> lines, int count, IDrawingConfig drawingConfig);
     }
 }

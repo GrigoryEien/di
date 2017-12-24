@@ -4,6 +4,6 @@ namespace TagsCloudVisualization.WordsExtraction
 {
     public interface IFileReader
     {
-        IEnumerable<string> ReadFile(string filename);
+        Result<IEnumerable<string>> ReadFile(string filename);
     }
 }

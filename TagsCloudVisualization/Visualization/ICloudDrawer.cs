@@ -5,6 +5,6 @@ namespace TagsCloudVisualization.Visualization
  {
      public interface ICloudDrawer
      {
-         Bitmap DrawMap(IEnumerable<WordInRect> words, DrawingConfig drawingConfig);
+         Bitmap DrawMap(IEnumerable<WordInRect> words, IDrawingConfig drawingConfig);
      }
  }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -18,7 +17,7 @@ namespace TagsCloudVisualization.Tests
             public void SetUp()
             {
                 
-                var bannedLines = new string[]
+                var bannedLines = new []
                 {
                     "I have some",
                     "Should be"
@@ -28,11 +27,11 @@ namespace TagsCloudVisualization.Tests
             }
 
             [Test]
-            public void ShouldCountOnlyWordsWithLengthGreaterOrEquallTo()
+            public void ShouldCountOnlyWordsWithLengthGreaterOrEqualTo()
             {
                 var lines = new List<string>() {"Some words should be skipped"};
                 var actualWords = wordsFilter.Filter(lines).ToArray();
-                var expectedWords = new string[]
+                var expectedWords = new []
                 {
                     "WORDS",
                     "SKIPPED",
@@ -45,7 +44,7 @@ namespace TagsCloudVisualization.Tests
             {
                 var lines = new List<string>() {"test TEST Test"};
                 var actualWords = wordsFilter.Filter(lines).ToArray();
-                var expectedWords = new string[]
+                var expectedWords = new []
                 {
                     "TEST",
                     "TEST",

@@ -4,6 +4,6 @@ namespace TagsCloudVisualization.CloudBuilding
 {
     public interface ICloudSaver
     {
-        void SaveCloud(Bitmap cloud, string filename, string extension);
+        Result<None> SaveCloud(Bitmap cloud, string filename, string extension);
     }
 }
